@@ -119,8 +119,8 @@ fi
 changed=0
 for address in "${desired_ips[@]}"; do
   is_ipv4 "$address" || die "API returned an invalid IPv4 address: $address"
-  if ip -o -4 address show dev "$iface" | awk '{print $4}' | grep -Fxq "$address/32"; then
-    log "already configured: $address/32 on $iface"
+  if ip -o -4 address show dev "$iface" | awk '{split($4,a,"/"); print a[1]}' | grep -Fxq "$address"; then
+    log "already configured: $address on $iface"
     continue
   fi
 
