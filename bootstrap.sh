@@ -3,8 +3,9 @@ set -Eeuo pipefail
 
 readonly REPOSITORY="abxian/vultr-ip-autoconfig"
 readonly REVISION="main"
-readonly INSTALL_SHA256="d428b1c3994724e74551233471bc90093ba889d3ca0c2b1b814af0adca18d9c6"
-readonly SYNC_SHA256="e298f3168bb734e2ce1e22eebaff9b8337d76bd8595f5a3f335c018a617700ed"
+readonly INSTALL_SHA256="8b77ef3ba4f629f431b97a01a06ea22aae3bfb4dcbee1093b107d0aa751c259d"
+readonly SYNC_SHA256="06e13c45081e13b70b7e7a7fb11a2d658b0ad0b66f2dee02dccd3f6cce711b27"
+readonly ADD_SHA256="7a9bbf11ed8368927102cfa6ad3ee1f6c7e6418f549811bf669cb8b0e05a9c76"
 readonly RAW_BASE="https://raw.githubusercontent.com/${REPOSITORY}/${REVISION}"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
@@ -34,10 +35,12 @@ sha256() {
 
 download install.sh
 download vultr-ip-sync.sh
+download vultr-ip-add.sh
 
 [[ $(sha256 "$tmp_dir/install.sh") == "$INSTALL_SHA256" ]] || die "install.sh SHA-256 校验失败"
 [[ $(sha256 "$tmp_dir/vultr-ip-sync.sh") == "$SYNC_SHA256" ]] || die "vultr-ip-sync.sh SHA-256 校验失败"
+[[ $(sha256 "$tmp_dir/vultr-ip-add.sh") == "$ADD_SHA256" ]] || die "vultr-ip-add.sh SHA-256 校验失败"
 
-chmod 0700 "$tmp_dir/install.sh" "$tmp_dir/vultr-ip-sync.sh"
+chmod 0700 "$tmp_dir/install.sh" "$tmp_dir/vultr-ip-sync.sh" "$tmp_dir/vultr-ip-add.sh"
 printf '下载和 SHA-256 校验通过，启动安装器……\n'
-"$tmp_dir/install.sh"
+"$tmp_dir/install.sh" "$@"
