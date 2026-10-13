@@ -18,13 +18,23 @@
 
 ## 一键安装
 
+在目标 Vultr 服务器执行：
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/abxian/vultr-ip-autoconfig/main/bootstrap.sh | sudo bash
+```
+
+引导脚本会从本仓库下载安装器和同步器，逐一核验固定的 SHA-256 后再执行。安装器会通过 `/dev/tty` 安全提示输入 Vultr API Token；Token 不会显示，也不会进入 shell 历史或进程参数。
+
+### 克隆后安装
+
 克隆仓库后运行：
 
 ```bash
 sudo ./install.sh
 ```
 
-安装器会安全地提示输入 Vultr API Token；输入不会显示，也不会出现在 shell 历史或进程参数中。实例 ID 可以留空，程序会用本机已有的主 IPv4 自动匹配 Vultr 实例。
+实例 ID 可以留空，程序会用本机已有的主 IPv4 自动匹配 Vultr 实例。
 
 不要使用下面这种形式传 Token，它会进入 shell 历史或进程环境：
 
