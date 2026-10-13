@@ -7,6 +7,7 @@
 - 只添加 Vultr API 返回的公网非主 IPv4；不改默认路由、网关、DNS 或主 IP。
 - 永不自动删除本机已有地址，API 故障不会造成 SSH 主地址被清理。
 - 安装前强制执行 `--dry-run`；预演失败时不启用定时器。
+- 安装时先验证 Token 能否访问实例列表，再执行端到端预演。
 - API Token 只写入服务器的 `/etc/vultr-ip-autoconfig.conf`，权限为 `0600`，不会上传 GitHub。
 - 重复执行安全，systemd 定时器默认每两分钟同步一次。
 
@@ -47,6 +48,7 @@ sudo ./install.sh --token "TOKEN"
 
 ```bash
 sudo vultr-ip-sync --dry-run
+sudo vultr-ip-sync --check
 sudo vultr-ip-sync
 ip -br -4 address
 ```

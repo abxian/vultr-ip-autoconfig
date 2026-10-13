@@ -103,7 +103,13 @@ EOF
 chmod 0644 "$SERVICE" "$TIMER"
 systemctl daemon-reload
 
-printf '\n先执行只读预演：\n'
+printf '\n验证 Vultr API Token：\n'
+if ! "$BIN_LINK" --check; then
+  printf '\nToken 无效、权限不足或 API 白名单未允许此服务器；服务尚未启用。\n' >&2
+  exit 1
+fi
+
+printf '\nToken 验证通过，执行只读预演：\n'
 if ! "$BIN_LINK" --dry-run; then
   printf '\n预演失败，服务尚未启用。请检查 Token、API 白名单或填写 INSTANCE_ID。\n' >&2
   exit 1

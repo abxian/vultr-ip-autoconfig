@@ -3,8 +3,8 @@ set -Eeuo pipefail
 
 readonly REPOSITORY="abxian/vultr-ip-autoconfig"
 readonly REVISION="main"
-readonly INSTALL_SHA256="3c552b5e4c9797f83faf363d90549443de5a216ff3a3f6a9097bdbebea26227c"
-readonly SYNC_SHA256="8af3df1659fbcd497fefe92a8f0a50a9b6c1d73b76a29a134c00fea93ea7f0c5"
+readonly INSTALL_SHA256="d428b1c3994724e74551233471bc90093ba889d3ca0c2b1b814af0adca18d9c6"
+readonly SYNC_SHA256="e298f3168bb734e2ce1e22eebaff9b8337d76bd8595f5a3f335c018a617700ed"
 readonly RAW_BASE="https://raw.githubusercontent.com/${REPOSITORY}/${REVISION}"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }

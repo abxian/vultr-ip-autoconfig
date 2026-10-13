@@ -5,22 +5,26 @@ readonly PROGRAM="vultr-ip-autoconfig"
 CONFIG_FILE="${VULTR_IP_CONFIG:-/etc/vultr-ip-autoconfig.conf}"
 API_BASE="${VULTR_API_BASE:-https://api.vultr.com/v2}"
 DRY_RUN=false
+CHECK_ONLY=false
 
 log() { printf '%s %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "$*"; }
 die() { log "ERROR: $*" >&2; exit 1; }
 
 usage() {
   cat <<'EOF'
-Usage: vultr-ip-sync [--dry-run] [--config PATH]
+Usage: vultr-ip-sync [--dry-run] [--check] [--config PATH]
 
 Adds public secondary IPv4 addresses assigned to this Vultr instance but
 missing from its main network interface. Existing addresses are never removed.
+
+  --check    Validate that the locally stored API token can list instances.
 EOF
 }
 
 while (($#)); do
   case "$1" in
     --dry-run) DRY_RUN=true ;;
+    --check) CHECK_ONLY=true ;;
     --config) shift; (($#)) || die "--config requires a path"; CONFIG_FILE="$1" ;;
     -h|--help) usage; exit 0 ;;
     *) die "unknown argument: $1" ;;
@@ -64,6 +68,12 @@ api_get() {
   rm -f "$body"
   printf '%s\n' "$output"
 }
+
+if $CHECK_ONLY; then
+  api_get '/instances?per_page=1' >/dev/null
+  log "Vultr API token accepted; instance list is accessible"
+  exit 0
+fi
 
 is_ipv4() {
   local ip=$1 octet
